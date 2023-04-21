@@ -23,10 +23,16 @@ from SocialTravel.views import( index,
                                 PostDelete, 
                                 SignUp,
                                 Login,
-                                Logout
-                                
-                                )
+                                Logout,
+                                ProfileUpdate,
+                                ProfileCreate,
+                                MensajeCreate,
+                                MensajeDelete,
+                                MensajeList
 
+                                )
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,4 +45,13 @@ urlpatterns = [
     path('signup/', SignUp.as_view(), name="signup"),
     path('login/', Login.as_view(), name="login"),
     path('logout/', Logout.as_view(), name="logout"),
+    path('profile/<pk>/update', ProfileUpdate.as_view(), name="profile-update"),
+    path('profile/<pk>/create', ProfileCreate.as_view(), name="profile-create"),
+    path('mensaje/enviar',MensajeCreate.as_view(), name="mensaje-create"),
+    path('mensaje/<pk>/delete',MensajeDelete.as_view(), name="mensaje-delete"),
+    path('mensaje/list',MensajeList.as_view(), name="mensaje-list"),
+
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

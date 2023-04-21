@@ -64,28 +64,26 @@ class Login(LoginView):
 class Logout(LogoutView):
     template_name = 'registration/logout.html'
 
-class ProfileUpdate(UpdateView):
+class ProfileUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Profile
     fields = '__all__'
     success_url = reverse_lazy("post-list")
 
     def test_func(self):
         user_id = self.request.user.id
-        post_id = self.kwargs.get('pk')
-        return Profile.objects.filter(publisher=user_id, id=post_id).exists()
+        return Profile.objects.filter(user=user_id).exists()
 
     def handle_no_permission(self):
         return render(self.request, 'SocialTravel/not_found.html')
 
-class ProfileCreate(LoginRequiredMixin,CreateView):
+class ProfileCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Profile
-    fields = ['user', 'imagen']
+    fields = "__all__"
     success_url = reverse_lazy("post-list")
 
     def test_func(self):
         user_id = self.request.user.id
-        post_id = self.kwargs.get('pk')
-        return Profile.objects.filter(publisher=user_id, id=post_id).exists()
+        return Profile.objects.filter(user=user_id).exists()
 
     def handle_no_permission(self):
         return render(self.request, 'SocialTravel/not_found.html')
